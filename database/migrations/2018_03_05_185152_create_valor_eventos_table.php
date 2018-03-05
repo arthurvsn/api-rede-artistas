@@ -15,8 +15,13 @@ class CreateValorEventosTable extends Migration
     {
         Schema::create('valor_eventos', function (Blueprint $table) {
             $table->increments('idvalor_evento');
+            $table->string('valor', 20);
+            
             $table->integer('idevento')->unsigned();
             $table->foreign('idevento')->references('idevento')->on('eventos');
+            
+            $table->integer('idusuarios')->unsigned();
+            $table->foreign('idusuarios')->references('idusuarios')->on('usuarios');
             $table->timestamps();
         });
     }

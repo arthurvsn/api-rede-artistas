@@ -11,6 +11,16 @@
 |
 */
 
+Route::group(array('prefix' => 'api'), function()
+{
+    Route::get('/', function () {
+        return response()->json(['message' => 'API connectStars', 'status' => 'Connected']);;
+    });
+
+    Route::resource('usuarios', 'UsuariosController');
+    Route::resource('tipoUsuarios', 'TipoUsuariosController');
+});
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('api');
 });
