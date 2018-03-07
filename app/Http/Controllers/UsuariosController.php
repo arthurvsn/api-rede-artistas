@@ -4,19 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Usuario;
+use \App\Response\Response;
 
 class UsuariosController extends Controller
 {
+    private $response;
+
     public function __construct() 
     {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
+        $this->response = new Response();
     }
     
     public function index()
     {
         $usuarios = Usuario::get();
+        $this->response->setTypeN();
+        $this->response->setDataSet($usuarios);
+        $this->response->setMessages("Sucesso!");
 
-        return response()->json($usuarios);
+        return response()->json($this->response->toString());
     }
 
     public function store(Request $request)
@@ -32,14 +38,20 @@ class UsuariosController extends Controller
     public function show($id)
     {
         $usuario = Usuario::find($id);
+        
+        if(!$usuario) 
+        {
+            $this->response->setTypeN();
+            $this->response->setMessages("Record not found!");
 
-        if(!$usuario) {
-            return response()->json([
-                'message'   => 'Record not found',
-            ], 404);
+            return response()->json($this->response->toString(), 404);
         }
 
-        return response()->json($usuario);
+        $this->response->setTypeS();
+        $this->response->setDataSet($usuario);
+        $this->response->setMessages("Sucesso!");
+
+        return response()->json($this->response->toString());
     }
 
     public function update(Request $request, $id)
